@@ -1,0 +1,47 @@
+version: '3'
+services:
+  nodeapp:
+    build:
+      context: nodejs
+    container_name: nodeapp
+    working_dir: /usr/src/app
+    command: bash -c "npm install && node index.js"
+    restart: always
+    networks:
+      - node-network
+    volumes:
+      - ./nodejs:/usr/src/app
+    tty: true
+    depends_on:
+      - dbmysql
+  
+  dbmysql:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: dbmysql
+    restart: always
+    tty: true
+    volumes:
+    - ./mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=fcdb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node-network
+  
+  nginx:
+    build:
+      context: nginx
+    container_name: nginx
+    restart: always
+    networks:
+      - node-network
+    tty: true
+    depends_on:
+      - dbmysql
+    ports: 
+      - "8888:80"
+
+networks:
+  node-network:
+    driver: bridge
