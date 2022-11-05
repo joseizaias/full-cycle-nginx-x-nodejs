@@ -8,7 +8,7 @@ Serão criados três containers
 << É necessário ter o docker e docker-compose previamente instalados>>
 
 primeiro clone o repositório e depois acesse a pasta onde os arquivos foram instalados e execute o comando:
--> docker-compose up -d
+-> docker-compose up -d --build
 
 os três containers serão criados e configurados.
 
